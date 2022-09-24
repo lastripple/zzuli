@@ -8,6 +8,7 @@ import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
@@ -39,10 +40,12 @@ public class HttpClientConfiguration {
     private Integer socketTimeout;
     private Integer connectTimeout;
     private Integer connectionRequestTimeout;
+    private Integer retryCount;
 
     @SneakyThrows
     @Bean
     public HttpClientBuilder getHttpClientBuilder() {
+
         X509TrustManager trustManager = new X509TrustManager() {
             @Override
             public X509Certificate[] getAcceptedIssuers() {
@@ -66,6 +69,7 @@ public class HttpClientConfiguration {
         // https 协议工厂
         SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
 
+
         // 配置请求参数
         RequestConfig requestConfig = RequestConfig.custom()
                 .setCookieSpec(CookieSpecs.STANDARD_STRICT)
@@ -79,7 +83,7 @@ public class HttpClientConfiguration {
                 // 设置客户端发起TCP连接请求的超时时间
                 .setConnectTimeout(connectTimeout * 1000)
                 // 设置客户端从连接池获取链接的超时时间
-                .setConnectionRequestTimeout(connectionRequestTimeout * 1000)
+//                .setConnectionRequestTimeout(connectionRequestTimeout * 1000)
                 .build();
 
         // 配置请求头
@@ -93,7 +97,9 @@ public class HttpClientConfiguration {
                 .setSSLSocketFactory(sslConnectionSocketFactory)
                 .setDefaultRequestConfig(requestConfig)
                 .setDefaultHeaders(headers)
-                .setRedirectStrategy(new LaxRedirectStrategy());
+                .setRedirectStrategy(new LaxRedirectStrategy())
+                // 设置重试次数
+                .setRetryHandler(new DefaultHttpRequestRetryHandler(retryCount, true));
     }
 }
 

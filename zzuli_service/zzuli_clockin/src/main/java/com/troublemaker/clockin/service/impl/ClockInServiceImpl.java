@@ -1,7 +1,7 @@
 package com.troublemaker.clockin.service.impl;
 
 
-import com.troublemaker.clockin.config.InputDataConfiguration;
+import com.troublemaker.clockin.config.YamlCommonDataConfiguration;
 import com.troublemaker.clockin.entity.*;
 import com.troublemaker.clockin.service.ClockInService;
 import org.apache.http.Header;
@@ -23,12 +23,12 @@ import static com.troublemaker.utils.httputils.HttpClientUtils.*;
 @Service
 public class ClockInServiceImpl implements ClockInService {
 
-    private final InputDataConfiguration inputDataConfig;
+    private final YamlCommonDataConfiguration yamlCommonDataConfiguration;
 
     @Autowired
-    public ClockInServiceImpl(InputDataConfiguration inputDataConfig) {
+    public ClockInServiceImpl(YamlCommonDataConfiguration yamlCommonDataConfiguration) {
 
-        this.inputDataConfig = inputDataConfig;
+        this.yamlCommonDataConfiguration = yamlCommonDataConfiguration;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ClockInServiceImpl implements ClockInService {
             schoolInputData.setJzCity(school.getJzCity());
             schoolInputData.setJzDistrict(school.getJzDistrict());
         }
-        schoolInputData.setLastTime(inputDataConfig.getCommon().getLastTime());
+        schoolInputData.setLastTime(yamlCommonDataConfiguration.getCommon().getLastTime());
         return schoolInputData;
     }
 
@@ -93,7 +93,7 @@ public class ClockInServiceImpl implements ClockInService {
             homeInputData.setJzCity(home.getJzCity());
             homeInputData.setJzDistrict(home.getJzDistrict());
         }
-        homeInputData.setLastTime(inputDataConfig.getCommon().getLastTime());
+        homeInputData.setLastTime(yamlCommonDataConfiguration.getCommon().getLastTime());
         return homeInputData;
     }
 

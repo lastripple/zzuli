@@ -1,5 +1,6 @@
 package com.troublemaker.order.excute;
 
+import com.troublemaker.order.config.YamlOrderDataConfiguration;
 import com.troublemaker.order.entity.Booker;
 import com.troublemaker.order.entity.FieldInfo;
 import com.troublemaker.order.service.FieldSelectionService;
@@ -25,22 +26,25 @@ public class DoOrderTask {
     private final HttpClientBuilder clientBuilder;
     private final List<FieldInfo> fieldInfos;
     private final ThreadPoolExecutor poolExecutor;
+    private final YamlOrderDataConfiguration orderDataConfiguration;
 
     @Autowired
-    public DoOrderTask(FieldSelectionService selectionService, HttpClientBuilder clientBuilder, List<FieldInfo> fieldInfos, ThreadPoolExecutor poolExecutor) {
+    public DoOrderTask(FieldSelectionService selectionService, HttpClientBuilder clientBuilder, List<FieldInfo> fieldInfos, ThreadPoolExecutor poolExecutor, YamlOrderDataConfiguration orderDataConfiguration) {
         this.selectionService = selectionService;
         this.clientBuilder = clientBuilder;
         this.fieldInfos = fieldInfos;
         this.poolExecutor = poolExecutor;
+        this.orderDataConfiguration = orderDataConfiguration;
     }
 
     public void start() {
         List<Booker> bookers = selectionService.getBookers();
-        CountDownLatch countDownLatch = new CountDownLatch(bookers.size());
-        for (int i = 0; i < bookers.size(); i++) {
+        int min = Math.min(bookers.size(), fieldInfos.size());
+        CountDownLatch countDownLatch = new CountDownLatch(min);
+        for (int i = 0; i < min; i++) {
             Booker booker = bookers.get(i);
             FieldInfo fieldInfo = fieldInfos.get(i);
-            poolExecutor.execute(new OrderTask(booker, countDownLatch, selectionService, fieldInfo, clientBuilder));
+            poolExecutor.execute(new OrderTask(booker, fieldInfo, orderDataConfiguration.getOrder(), clientBuilder, countDownLatch, selectionService));
         }
 
         // 等待子线程任务完成

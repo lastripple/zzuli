@@ -40,6 +40,7 @@ public class HttpClientConfiguration {
     private Integer socketTimeout;
     private Integer connectTimeout;
     private Integer connectionRequestTimeout;
+    private Integer retryCount;
 
     @SneakyThrows
     @Bean
@@ -98,7 +99,7 @@ public class HttpClientConfiguration {
                 .setDefaultHeaders(headers)
                 .setRedirectStrategy(new LaxRedirectStrategy())
                 // 设置重试次数
-                .setRetryHandler(new DefaultHttpRequestRetryHandler(2, false));
+                .setRetryHandler(new DefaultHttpRequestRetryHandler(retryCount, true));
     }
 }
 

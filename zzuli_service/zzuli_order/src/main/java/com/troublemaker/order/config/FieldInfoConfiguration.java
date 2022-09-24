@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Configuration
 @ConfigurationProperties(prefix = "data.field")
-public class FieldInfoConfig {
+public class FieldInfoConfiguration {
    private List<FieldInfo> fields;
 
    @Bean

@@ -2,6 +2,7 @@ package com.troublemaker.order.thread;
 
 import com.troublemaker.order.entity.Booker;
 import com.troublemaker.order.entity.FieldInfo;
+import com.troublemaker.order.entity.YamlOrderData;
 import com.troublemaker.order.service.FieldSelectionService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +21,8 @@ import java.util.concurrent.CountDownLatch;
 public class OrderTask implements Runnable {
     private final Booker booker;
     private final FieldInfo fieldInfo;
+
+    private final YamlOrderData orderData;
     private final HttpClientBuilder clientBuilder;
     private final CountDownLatch countDownLatch;
     private CloseableHttpClient client = null;
@@ -28,17 +31,17 @@ public class OrderTask implements Runnable {
     private static final String LOGIN_URL = "http://kys.zzuli.edu.cn/cas/login";
     private static final String HOME_URL = "http://cgyy.zzuli.edu.cn/User/UserChoose?LoginType=1";
 
-    public OrderTask(Booker booker, CountDownLatch countDownLatch, FieldSelectionService service, FieldInfo fieldInfo, HttpClientBuilder clientBuilder) {
+    public OrderTask(Booker booker, FieldInfo fieldInfo, YamlOrderData orderData, HttpClientBuilder clientBuilder, CountDownLatch countDownLatch, FieldSelectionService service) {
         this.booker = booker;
+        this.fieldInfo = fieldInfo;
+        this.orderData = orderData;
+        this.clientBuilder = clientBuilder;
         this.countDownLatch = countDownLatch;
         this.service = service;
-        this.fieldInfo = fieldInfo;
-        this.clientBuilder = clientBuilder;
     }
 
     @Override
     public void run() {
-
         try {
             client = clientBuilder.build();
             // 登录
@@ -56,14 +59,15 @@ public class OrderTask implements Runnable {
 
             // 提交
             // 重复提交，避免sql死锁导致资源释放
+            int count = orderData.getRetryCount();
+            int intervalTime = orderData.getIntervalTime();
             String message = null;
-            int count = 3;
             for (int i = 0; i < count; i++) {
                 message = service.subMit(client, booker.getUsername(), oId);
                 if ("预订成功！".equals(message)) {
                     break;
                 } else {
-                    Thread.sleep(1000);
+                    Thread.sleep(intervalTime);
                 }
             }
             log.info(booker.getUsername() + " " + fieldInfo.getFieldName() + " 预约状态: " + message);

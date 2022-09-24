@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "data.pool")
-public class ThreadPoolConfig {
+public class ThreadPoolConfiguration {
     // corePoolSize     核心线程数
     // maximumPoolSize  最大线程数
     // keepAliveTime    空闲线程存活时间

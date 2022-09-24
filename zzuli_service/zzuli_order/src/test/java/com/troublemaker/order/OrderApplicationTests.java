@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @Slf4j
 public class OrderApplicationTests {
-
     @Autowired
     private DoOrderTask doOrdertask;
 
@@ -25,5 +24,4 @@ public class OrderApplicationTests {
         doOrdertask.start();
         log.info("-----------------测试完毕-------------------");
     }
-
 }

@@ -63,6 +63,7 @@ data:
     socketTimeout: 60
     connectTimeout: 60
     connectionRequestTimeout: 60
+    retryCount: 3
 
   # 打卡数据配置
   common:

@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "data")
-public class InputDataConfiguration {
+public class YamlCommonDataConfiguration {
     private YamlCommonData common;
 }
 
