@@ -23,6 +23,8 @@ public interface FieldSelectionService {
 
     Map<String, String> loginMap(Booker booker, String lt);
 
+    String getHost(CloseableHttpClient client, String url);
+
     /**
      * @description: get  http://kys.zzuli.edu.cn/cas/login
      * 获取登录所需的隐藏域lt的值
@@ -42,6 +44,8 @@ public interface FieldSelectionService {
      * @return: void
      **/
     void login(CloseableHttpClient client, String url, Map<String, String> map);
+
+    String getOrderHost(CloseableHttpClient client);
 
     /**
      * @description: get  http://cgyy.zzuli.edu.cn/User/UserChoose?LoginType=1
@@ -102,7 +106,7 @@ public interface FieldSelectionService {
      * @param: [client, checkData]
      * @return: java.lang.String
      **/
-    String order(CloseableHttpClient client, String checkData) throws MyException;
+    String order(CloseableHttpClient client, String url) throws MyException;
 
     /**
      * @description: get "http://cgyy.zzuli.edu.cn/Field/CardPay?" +
@@ -126,7 +130,7 @@ public interface FieldSelectionService {
      * @param: [client, cardNo, OID]
      * @return: java.lang.String
      **/
-    String subMit(CloseableHttpClient client, String cardNo, String oId);
+    String subMit(CloseableHttpClient client, String url);
 
     /**
      * @description: get "http://cgyy.zzuli.edu.cn/Field/GetFieldOrder?PageNum=1&PageSize=6&Condition=" +

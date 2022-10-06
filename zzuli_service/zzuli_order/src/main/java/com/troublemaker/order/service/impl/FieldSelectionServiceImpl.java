@@ -21,6 +21,7 @@ import java.net.URLEncoder;
 import java.util.*;
 
 import static com.alibaba.fastjson.JSON.*;
+import static com.alibaba.fastjson.JSON.parseObject;
 import static com.troublemaker.order.OrderRun.startTime;
 import static com.troublemaker.utils.encryptionutils.EncryptionUtil.getBase64Password;
 import static com.troublemaker.utils.httputils.HttpClientUtils.*;
@@ -53,9 +54,25 @@ public class FieldSelectionServiceImpl extends ServiceImpl<BookerMapper, Booker>
         loginMap.put("secret", "");
         loginMap.put("accountLogin", "");
         loginMap.put("lt", lt);
-        loginMap.put("execution", "e1s1");
+        loginMap.put("execution", "e2s1");
         loginMap.put("_eventId", "submit");
         return loginMap;
+    }
+
+    public String getHost(CloseableHttpClient client, String url) {
+        String host = null;
+        String entityStr = doGetForEntity(client, url);
+
+        String[] split = Objects.requireNonNull(Jsoup.parse(entityStr).select("script").first()).toString().split("var");
+        for (String s : split) {
+            if (s.contains("__vpn_app_hostname_data")) {
+                host = s;
+            }
+        }
+        if (host == null) {
+            throw new RuntimeException("没有获取到Host");
+        } else return host.split("\"")[1];
+
     }
 
     @Override
@@ -67,6 +84,25 @@ public class FieldSelectionServiceImpl extends ServiceImpl<BookerMapper, Booker>
     @Override
     public void login(CloseableHttpClient client, String url, Map<String, String> map) {
         doApplicationPost(client, url, map);
+    }
+
+    @Override
+    public String getOrderHost(CloseableHttpClient client) {
+        String host = null;
+        String url = "https://webvpn.zzuli.edu.cn/user/portal_groups?_t=" + System.currentTimeMillis();
+        String entityStr = doGetForEntity(client, url);
+        JSONObject jsonObject = parseObject(entityStr);
+        JSONArray data = jsonObject.getJSONArray("data");
+        for (int i = 0; i < data.size(); i++) {
+            JSONArray resource = data.getJSONObject(i).getJSONArray("resource");
+            for (int j = 0; j < resource.size(); j++) {
+                // 科学校区体育馆预约
+                if (resource.getJSONObject(j).getString("name").equals("科学校区体育馆预约")) {
+                    host = resource.getJSONObject(j).getString("redirect");
+                }
+            }
+        }
+        return Objects.requireNonNull(host).split("/")[2];
     }
 
     @Override
@@ -114,8 +150,7 @@ public class FieldSelectionServiceImpl extends ServiceImpl<BookerMapper, Booker>
     }
 
     @Override
-    public String order(CloseableHttpClient client, String checkData) throws MyException {
-        String url = "http://cgyy.zzuli.edu.cn/Field/OrderField?dateadd=0&VenueNo=001&checkdata=" + checkData;
+    public String order(CloseableHttpClient client, String url) throws MyException {
         long endTime = System.currentTimeMillis();
         long difference = timeDifference(url) - (endTime - startTime);
         try {
@@ -133,23 +168,7 @@ public class FieldSelectionServiceImpl extends ServiceImpl<BookerMapper, Booker>
     }
 
     @Override
-    public String subMit(CloseableHttpClient client, String cardNo, String oId) {
-        String url = "http://cgyy.zzuli.edu.cn/Field/CardPay?" +
-                "PayNo=02" +
-                "&Money=0" +
-                "&CardMoney=1" +
-                "&Count=0.00" +
-                "&MemberNo=" +
-                "&CardNo=" + cardNo +
-                "&BillType=100" +
-                "&Password=" +
-                "&IsCheckPassword=0" +
-                "&OID=" + oId +
-                "&VenueNo=001" +
-                "&PayDiscount=100" +
-                "&IsUseMemberType=1" +
-                "&EWMNum=1" +
-                "&_=" + System.currentTimeMillis();
+    public String subMit(CloseableHttpClient client, String url) {
         JSONObject jsonObject = parseObject(doGetForEntity(client, url));
         return jsonObject.get("message").toString();
     }

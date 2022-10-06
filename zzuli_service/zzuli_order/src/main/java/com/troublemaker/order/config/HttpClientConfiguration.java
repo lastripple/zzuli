@@ -41,6 +41,8 @@ public class HttpClientConfiguration {
     private Integer connectTimeout;
     private Integer connectionRequestTimeout;
     private Integer retryCount;
+    private String hostName;
+    private Integer port;
 
     @SneakyThrows
     @Bean
@@ -69,7 +71,6 @@ public class HttpClientConfiguration {
         // https 协议工厂
         SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
 
-
         // 配置请求参数
         RequestConfig requestConfig = RequestConfig.custom()
                 .setCookieSpec(CookieSpecs.STANDARD_STRICT)
@@ -84,6 +85,8 @@ public class HttpClientConfiguration {
                 .setConnectTimeout(connectTimeout * 1000)
                 // 设置客户端从连接池获取链接的超时时间
 //                .setConnectionRequestTimeout(connectionRequestTimeout * 1000)
+                // 设置代理服务器
+//                .setProxy(new HttpHost(hostName, port))
                 .build();
 
         // 配置请求头
@@ -99,7 +102,7 @@ public class HttpClientConfiguration {
                 .setDefaultHeaders(headers)
                 .setRedirectStrategy(new LaxRedirectStrategy())
                 // 设置重试次数
-                .setRetryHandler(new DefaultHttpRequestRetryHandler(retryCount, true));
+                .setRetryHandler(new DefaultHttpRequestRetryHandler(retryCount, false));
     }
 }
 

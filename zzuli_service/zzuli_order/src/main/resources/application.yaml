@@ -54,7 +54,14 @@ data:
     connectTimeout: 60
     connectionRequestTimeout: 60
     retryCount: 3
+    hostName: 202.196.0.40
+    port: 80
 
+  order:
+    # 预约死锁间隔时间
+    intervalTime: 500
+    # 预约重试次数
+    retryCount: 5
 
   # FieldInfos
   field:
@@ -92,10 +99,5 @@ data:
   # 启动时间
   run:
     cron: 0 0 7 * * ?
-  order:
-    # 预约死锁间隔时间
-    intervalTime: 500
-    # 预约重试次数
-    retryCount: 5
 
 

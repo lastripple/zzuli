@@ -99,7 +99,7 @@ public class HttpClientConfiguration {
                 .setDefaultHeaders(headers)
                 .setRedirectStrategy(new LaxRedirectStrategy())
                 // 设置重试次数
-                .setRetryHandler(new DefaultHttpRequestRetryHandler(retryCount, true));
+                .setRetryHandler(new DefaultHttpRequestRetryHandler(retryCount, false));
     }
 }
 

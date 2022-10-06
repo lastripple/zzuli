@@ -28,8 +28,26 @@ public class OrderTask implements Runnable {
     private CloseableHttpClient client = null;
 
     private final FieldSelectionService service;
-    private static final String LOGIN_URL = "http://kys.zzuli.edu.cn/cas/login";
-    private static final String HOME_URL = "http://cgyy.zzuli.edu.cn/User/UserChoose?LoginType=1";
+    private static final String VPN_URL = "https://webvpn.zzuli.edu.cn/login?cas_login=true";
+    private static final String URL_PREFIX = "https://webvpn.zzuli.edu.cn/http/";
+    private static final String LOGIN_URL = "/cas/login?service=https://webvpn.zzuli.edu.cn/login?cas_login=true";
+    private static final String HOME_URL = "/User/UserChoose?LoginType=1";
+    private static final String Order_Url = "/Field/OrderField?vpn-12-o1-cgyy.zzuli.edu.cn&dateadd=0&VenueNo=001&checkdata=";
+    private static final String Submit_PREFIX = "/Field/CardPay?" +
+            "vpn-12-o1-cgyy.zzuli.edu.cn" +
+            "&PayNo=02" +
+            "&Money=0" +
+            "&CardMoney=1" +
+            "&Count=0.00" +
+            "&MemberNo=" +
+            "&BillType=100" +
+            "&Password=" +
+            "&IsCheckPassword=0" +
+            "&VenueNo=001" +
+            "&PayDiscount=100" +
+            "&IsUseMemberType=1" +
+            "&EWMNum=1";
+
 
     public OrderTask(Booker booker, FieldInfo fieldInfo, YamlOrderData orderData, HttpClientBuilder clientBuilder, CountDownLatch countDownLatch, FieldSelectionService service) {
         this.booker = booker;
@@ -43,19 +61,30 @@ public class OrderTask implements Runnable {
     @Override
     public void run() {
         try {
+            String URL_Host;
+            // 获取VPN HOST
             client = clientBuilder.build();
-            // 登录
-            String lt = service.getLt(client, LOGIN_URL);
-            service.login(client, LOGIN_URL, service.loginMap(booker, lt));
+            String host = service.getHost(client, VPN_URL);
+            URL_Host = URL_PREFIX + host;
+
+            // 登录认证
+            String lt = service.getLt(client, URL_Host + LOGIN_URL);
+            service.login(client, URL_Host + LOGIN_URL, service.loginMap(booker, lt));
+
+            // 获取OrderHost
+            host = service.getOrderHost(client);
+            URL_Host = URL_PREFIX + host;
 
             // 获取cookie
-            service.getHomePage(client, HOME_URL);
+            service.getHomePage(client, URL_Host + HOME_URL);
 
             // 对预定场所进行处理
             String orderFieldJson = service.orderInvariableField(fieldInfo);
 
+            // String url = "http://cgyy.zzuli.edu.cn/Field/OrderField?dateadd=0&VenueNo=001&checkdata=" + checkData;
+            // /Field/OrderField?vpn-12-o1-cgyy.zzuli.edu.cn&dateadd=0&VenueNo=001&checkdata=
             // 预约
-            String oId = service.order(client, orderFieldJson);
+            String oId = service.order(client, URL_Host + Order_Url + orderFieldJson);
 
             // 提交
             // 重复提交，避免sql死锁导致资源释放
@@ -63,7 +92,11 @@ public class OrderTask implements Runnable {
             int intervalTime = orderData.getIntervalTime();
             String message = null;
             for (int i = 0; i < count; i++) {
-                message = service.subMit(client, booker.getUsername(), oId);
+                String submitUrl = URL_PREFIX + Submit_PREFIX +
+                        "&CardNo=" + booker.getUsername() +
+                        "&OID=" + oId +
+                        "&_=" + System.currentTimeMillis();
+                message = service.subMit(client, submitUrl);
                 if ("预订成功！".equals(message)) {
                     break;
                 } else {
