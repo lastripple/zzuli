@@ -46,20 +46,35 @@ public class DoClockInTask {
         this.poolExecutor = poolExecutor;
     }
 
-    public void start() {
-        List<User> users = userService.getUsers();
+    public boolean start() {
+        // 获取 clock_type != 2, clock_status = 0;
+        List<User> users = userService.getUnClockUsers();
         CountDownLatch countDownLatch = new CountDownLatch(users.size());
 
         for (User user : users) {
             // 自定义全局线程池
             // CallerRunsPolicy()策略, 即调用者(main)执行该任务
-            poolExecutor.execute(new ClockInTask(user, sendMail, clockInService, loginService, homeService, schoolService, clientBuilder, countDownLatch));
+            poolExecutor.execute(new ClockInTask(user, sendMail, clockInService, loginService, userService, homeService, schoolService, clientBuilder, countDownLatch));
         }
 
         // 等待子线程任务完成
         try {
+            log.info("-----------------等待中-------------------");
             countDownLatch.await();
+
         } catch (Exception ignored) {
+        }
+
+        log.info("-----------------判断是否全部打卡完成-------------------");
+        // 获取 clock_type != 2, clock_status = 0;
+        boolean empty = userService.getUnClockUsers().isEmpty();
+        if (empty) {
+            log.info("-----------------已全部打卡，重置打卡状态-------------------");
+            userService.reSetClockStatus();
+            return true;
+        } else {
+            log.info("-----------------未全部打卡，return false-------------------");
+            return false;
         }
     }
 

@@ -1,10 +1,7 @@
 package com.troublemaker.clockin.thread;
 
 import com.troublemaker.clockin.entity.*;
-import com.troublemaker.clockin.service.ClockInService;
-import com.troublemaker.clockin.service.HomeService;
-import com.troublemaker.clockin.service.LoginService;
-import com.troublemaker.clockin.service.SchoolService;
+import com.troublemaker.clockin.service.*;
 import com.troublemaker.utils.mailutils.SendMail;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
@@ -28,6 +25,8 @@ public class ClockInTask implements Runnable {
 
     private final LoginService loginService;
 
+    private final UserService userService;
+
     private final HomeService homeService;
 
     private final SchoolService schoolService;
@@ -44,11 +43,12 @@ public class ClockInTask implements Runnable {
     private String userInfoUrl = "https://msg.zzuli.edu.cn/xsc/get_user_info?wj_type=";
 //    private static final String HISTORY_URL = "https://msg.zzuli.edu.cn/xsc/log?type=0";
 
-    public ClockInTask(User user, SendMail sendMail, ClockInService clockInService, LoginService loginService, HomeService homeService, SchoolService schoolService, HttpClientBuilder clientBuilder, CountDownLatch countDownLatch) {
+    public ClockInTask(User user, SendMail sendMail, ClockInService clockInService, LoginService loginService, UserService userService, HomeService homeService, SchoolService schoolService, HttpClientBuilder clientBuilder, CountDownLatch countDownLatch) {
         this.user = user;
         this.sendMail = sendMail;
         this.clockInService = clockInService;
         this.loginService = loginService;
+        this.userService = userService;
         this.homeService = homeService;
         this.schoolService = schoolService;
         this.clientBuilder = clientBuilder;
@@ -100,7 +100,8 @@ public class ClockInTask implements Runnable {
                 clockInfo = clockInService.submitData(client, ADD_URL, inputData, header);
                 if (SUCCESS.equals(clockInfo)) {
                     log.info(user.getUsername() + " " + clockInfo);
-//                    log.info(inputData.toString());
+                    // 打卡完成，将打卡状态修改为 1, 即已打卡。
+                    userService.changeClockStatus(user);
 //                    sendMail.sendSimpleMail(user.getEmail(), "🦄🦄🦄旋转木马提醒你,打卡成功💕💕💕");
                     break;
                 }

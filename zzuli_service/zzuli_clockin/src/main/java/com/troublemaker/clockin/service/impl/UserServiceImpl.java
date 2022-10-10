@@ -59,6 +59,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public boolean changeClockStatus(User user) {
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("clock_status", 1).eq("username", user.getUsername());
+        int i = baseMapper.update(null, updateWrapper);
+        return i > 0;
+    }
+
+    @Override
+    public boolean reSetClockStatus() {
+        List<User> users = getUsers();
+        int sum = 0;
+        for (User user : users) {
+            UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.set("clock_status", 0).eq("username", user.getUsername());
+            sum += baseMapper.update(null, updateWrapper);
+        }
+        return sum == users.size();
+    }
+
+    @Override
     public User getUserByUsername(User user) {
         return baseMapper.selectOne(new QueryWrapper<User>().eq("username", user.getUsername()));
     }
@@ -67,6 +87,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public List<User> getUsers() {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.ne("clock_type", "2");
+        return baseMapper.selectList(wrapper);
+    }
+
+    @Override
+    public List<User> getUnClockUsers() {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.ne("clock_type", "2").eq("clock_status", "0");
         return baseMapper.selectList(wrapper);
     }
 

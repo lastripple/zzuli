@@ -21,11 +21,16 @@ public interface UserService extends IService<User> {
     User getUserByUsername(User user);
 
     List<User> getUsers();
+    List<User> getUnClockUsers();
 
     boolean addUser(User user);
 
     boolean updatePasswordByUsername(User user);
 
     ResultResponse changeClockType(String token, Integer clockType);
+
+    boolean changeClockStatus(User user);
+
+    boolean reSetClockStatus();
 }
 

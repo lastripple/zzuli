@@ -18,5 +18,6 @@ public class User {
     private String username;
     private String password;
     private byte clockType;
+    private boolean clockStatus;
 }
 

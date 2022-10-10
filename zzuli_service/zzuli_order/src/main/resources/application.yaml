@@ -71,20 +71,20 @@ data:
 #          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ019",fieldName: "羽毛球05-3",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
 #          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ020",fieldName: "羽毛球05-4",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
 #
-          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ021",fieldName: "羽毛球06-1",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
-          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ022",fieldName: "羽毛球06-2",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
-          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ023",fieldName: "羽毛球06-3",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
-          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ024",fieldName: "羽毛球06-4",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
-
+#          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ021",fieldName: "羽毛球06-1",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
+#          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ022",fieldName: "羽毛球06-2",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
+#          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ023",fieldName: "羽毛球06-3",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
+#          - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ024",fieldName: "羽毛球06-4",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
+#
           - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ025",fieldName: "羽毛球07-1",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
           - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ026",fieldName: "羽毛球07-2",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
           - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ027",fieldName: "羽毛球07-3",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
           - { beginTime: "19:30",endTime: "20:30",fieldNo: "YMQ028",fieldName: "羽毛球07-4",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
-#
-#          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ017",fieldName: "羽毛球05-1",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
-#          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ018",fieldName: "羽毛球05-2",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
-#          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ019",fieldName: "羽毛球05-3",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
-#          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ020",fieldName: "羽毛球05-4",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
+
+          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ017",fieldName: "羽毛球05-1",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
+          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ018",fieldName: "羽毛球05-2",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
+          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ019",fieldName: "羽毛球05-3",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
+          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ020",fieldName: "羽毛球05-4",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
 
 #          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ021",fieldName: "羽毛球06-1",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }
 #          - { beginTime: "20:30",endTime: "21:30",fieldNo: "YMQ022",fieldName: "羽毛球06-2",fieldTypeNo: "03",price: "0.00",timeStatus: 1,fieldState: 0 }

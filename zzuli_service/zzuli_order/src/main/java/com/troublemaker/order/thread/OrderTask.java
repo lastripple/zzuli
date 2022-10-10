@@ -92,7 +92,7 @@ public class OrderTask implements Runnable {
             int intervalTime = orderData.getIntervalTime();
             String message = null;
             for (int i = 0; i < count; i++) {
-                String submitUrl = URL_PREFIX + Submit_PREFIX +
+                String submitUrl = URL_Host + Submit_PREFIX +
                         "&CardNo=" + booker.getUsername() +
                         "&OID=" + oId +
                         "&_=" + System.currentTimeMillis();

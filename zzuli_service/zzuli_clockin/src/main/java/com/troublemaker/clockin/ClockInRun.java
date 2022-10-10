@@ -21,9 +21,7 @@ import static com.troublemaker.utils.httputils.HttpClientUtils.clientClose;
 public class ClockInRun {
 
     private DoClockInTask doClockInTask;
-
     private ServletContext servletContext;
-
     public static long startTime;
 
     @Autowired
@@ -36,7 +34,10 @@ public class ClockInRun {
     public void doClockIn() {
         log.info("-----------------打卡启动-------------------");
         startTime = System.currentTimeMillis();
-        doClockInTask.start();
+        boolean clock;
+        do {
+            clock = doClockInTask.start();
+        } while (!clock);
         log.info("-----------------打卡完成-------------------");
         log.info("-----------------清理启动-------------------");
         int count = 0;
