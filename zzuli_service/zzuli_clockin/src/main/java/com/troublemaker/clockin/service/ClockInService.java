@@ -25,4 +25,5 @@ public interface ClockInService {
     HomeInputData HomeFinalData(HomeInputData homeInputData, Home home);
 
     String submitData(CloseableHttpClient client, String url, Object data, Header header);
+
 }

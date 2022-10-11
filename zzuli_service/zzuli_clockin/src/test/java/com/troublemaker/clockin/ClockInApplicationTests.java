@@ -1,7 +1,7 @@
 package com.troublemaker.clockin;
 
 import com.troublemaker.clockin.execute.DoClockInTask;
-import com.troublemaker.clockin.service.UserService;
+import com.troublemaker.clockin.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +18,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ClockInApplicationTests {
 
     @Autowired
+    private CommonService commonService;
+    @Autowired
     private DoClockInTask doClockInTask;
+
 
     @Test
     void contextLoads() {
-        log.info("-----------------测试启动-------------------");
-        boolean clock;
-        do {
-            clock = doClockInTask.start();
-        } while (!clock);
-        log.info("-----------------测试完毕-------------------");
+        commonService.doClock(doClockInTask);
     }
 }

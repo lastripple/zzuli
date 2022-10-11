@@ -59,21 +59,17 @@ public class DoClockInTask {
 
         // 等待子线程任务完成
         try {
-            log.info("-----------------等待中-------------------");
             countDownLatch.await();
 
         } catch (Exception ignored) {
         }
 
-        log.info("-----------------判断是否全部打卡完成-------------------");
         // 获取 clock_type != 2, clock_status = 0;
         boolean empty = userService.getUnClockUsers().isEmpty();
         if (empty) {
-            log.info("-----------------已全部打卡，重置打卡状态-------------------");
             userService.reSetClockStatus();
             return true;
         } else {
-            log.info("-----------------未全部打卡，return false-------------------");
             return false;
         }
     }

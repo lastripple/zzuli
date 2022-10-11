@@ -4,6 +4,7 @@ package com.troublemaker.clockin.service.impl;
 import com.troublemaker.clockin.config.YamlCommonDataConfiguration;
 import com.troublemaker.clockin.entity.*;
 import com.troublemaker.clockin.service.ClockInService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.jsoup.Jsoup;
@@ -21,13 +22,13 @@ import static com.troublemaker.utils.httputils.HttpClientUtils.*;
  * @date 2022- 04 28 21:08
  */
 @Service
+@Slf4j
 public class ClockInServiceImpl implements ClockInService {
 
     private final YamlCommonDataConfiguration yamlCommonDataConfiguration;
 
     @Autowired
     public ClockInServiceImpl(YamlCommonDataConfiguration yamlCommonDataConfiguration) {
-
         this.yamlCommonDataConfiguration = yamlCommonDataConfiguration;
     }
 
@@ -113,4 +114,6 @@ public class ClockInServiceImpl implements ClockInService {
         }
         return doJsonPostWithHeader(client, url, params, header);
     }
+
+
 }

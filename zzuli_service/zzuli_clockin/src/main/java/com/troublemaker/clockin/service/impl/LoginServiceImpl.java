@@ -6,12 +6,14 @@ import com.troublemaker.clockin.entity.ResultResponse;
 import com.troublemaker.clockin.entity.User;
 import com.troublemaker.clockin.service.LoginService;
 import com.troublemaker.clockin.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +28,7 @@ import static com.troublemaker.utils.httputils.HttpClientUtils.*;
  * @Version: 1.0
  */
 @Service
+@Slf4j
 public class LoginServiceImpl implements LoginService {
 
     private final UserService userService;
@@ -117,5 +120,23 @@ public class LoginServiceImpl implements LoginService {
 
     }
 
+    @Override
+    public void cleanClient() {
+        log.info("-----------------清理启动-------------------");
+        int count = 0;
+        Enumeration<String> e = servletContext.getAttributeNames();
+        while (e.hasMoreElements()) {
+            String key = e.nextElement();
+            Object value = servletContext.getAttribute(key);
+            servletContext.removeAttribute(key);
+            if (value instanceof CloseableHttpClient) {
+                count++;
+                CloseableHttpClient client = (CloseableHttpClient) value;
+                clientClose(client);
+            }
+        }
+        log.info("总数: " + count);
+        log.info("-----------------清理完成-------------------");
+    }
 }
 

@@ -25,4 +25,6 @@ public interface LoginService {
 
     ResultResponse verifyUserAndISToken(CloseableHttpClient client, User user);
 
+    void cleanClient();
+
 }
