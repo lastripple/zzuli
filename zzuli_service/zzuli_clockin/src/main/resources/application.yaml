@@ -16,7 +16,7 @@ spring:
     port: 465
     host: smtp.qq.com
     username: 1807366859@qq.com
-    password: bhminismyqwwebgf
+    password: vnevbojknjubdeib
     default-encoding: utf-8
     protocol: smtp
     properties:
@@ -72,7 +72,7 @@ data:
 
   # 启动时间
   run:
-    cron: 0 21 8 * * ?
+    cron: 0 55 20 * * ?
 
 
 

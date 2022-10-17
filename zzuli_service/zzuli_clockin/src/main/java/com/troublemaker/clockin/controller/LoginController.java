@@ -27,7 +27,6 @@ import javax.servlet.ServletContext;
 public class LoginController {
     private final LoginService loginService;
     private final HttpClientBuilder httpClientBuilder;
-
     private final ServletContext servletContext;
 
     @Autowired

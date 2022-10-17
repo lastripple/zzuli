@@ -1,6 +1,7 @@
 package com.troublemaker.clockin.service;
 
 import com.troublemaker.clockin.execute.DoClockInTask;
+import com.troublemaker.utils.mailutils.SendMail;
 
 /**
  * @BelongsProject: zzuli
@@ -11,6 +12,6 @@ import com.troublemaker.clockin.execute.DoClockInTask;
  * @Version: 1.0
  */
 public interface CommonService {
-    boolean doClock(DoClockInTask doClockInTask);
+    boolean doClock(DoClockInTask doClockInTask, SendMail sendMail);
 }
 

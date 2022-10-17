@@ -3,6 +3,7 @@ package com.troublemaker.clockin;
 import com.troublemaker.clockin.execute.DoClockInTask;
 import com.troublemaker.clockin.service.CommonService;
 import com.troublemaker.clockin.service.LoginService;
+import com.troublemaker.utils.mailutils.SendMail;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,20 +22,21 @@ public class ClockInRun {
 
     private final DoClockInTask doClockInTask;
     private final LoginService loginService;
+
+    private final SendMail sendMail;
     public static long startTime;
 
     @Autowired
-    public ClockInRun(DoClockInTask doClockInTask, CommonService commonService, LoginService loginService) {
+    public ClockInRun(CommonService commonService, DoClockInTask doClockInTask, LoginService loginService, SendMail sendMail) {
         this.commonService = commonService;
         this.doClockInTask = doClockInTask;
         this.loginService = loginService;
+        this.sendMail = sendMail;
     }
-
-
 
     @Scheduled(cron = "${data.run.cron}")
     public void doClockIn() {
-        commonService.doClock(doClockInTask);
+        commonService.doClock(doClockInTask, sendMail);
         loginService.cleanClient();
     }
 
