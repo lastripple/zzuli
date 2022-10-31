@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class YamlCommonData {
+    private Boolean autoData;
     private String lastTime;
 }
 

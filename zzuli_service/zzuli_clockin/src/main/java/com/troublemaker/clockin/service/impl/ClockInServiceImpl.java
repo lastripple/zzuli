@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static com.alibaba.fastjson.JSON.parseObject;
 import static com.alibaba.fastjson.JSON.toJSONString;
 import static com.troublemaker.clockin.ClockInRun.startTime;
@@ -76,7 +79,13 @@ public class ClockInServiceImpl implements ClockInService {
             schoolInputData.setJzCity(school.getJzCity());
             schoolInputData.setJzDistrict(school.getJzDistrict());
         }
-        schoolInputData.setLastTime(yamlCommonDataConfiguration.getCommon().getLastTime());
+        if (!yamlCommonDataConfiguration.getCommon().getAutoData()) {
+            schoolInputData.setLastTime(yamlCommonDataConfiguration.getCommon().getLastTime());
+        } else {
+            Date day = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            schoolInputData.setLastTime(simpleDateFormat.format(day));
+        }
         return schoolInputData;
     }
 
@@ -94,7 +103,13 @@ public class ClockInServiceImpl implements ClockInService {
             homeInputData.setJzCity(home.getJzCity());
             homeInputData.setJzDistrict(home.getJzDistrict());
         }
-        homeInputData.setLastTime(yamlCommonDataConfiguration.getCommon().getLastTime());
+        if (!yamlCommonDataConfiguration.getCommon().getAutoData()) {
+            homeInputData.setLastTime(yamlCommonDataConfiguration.getCommon().getLastTime());
+        } else {
+            Date day = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            homeInputData.setLastTime(simpleDateFormat.format(day));
+        }
         return homeInputData;
     }
 
